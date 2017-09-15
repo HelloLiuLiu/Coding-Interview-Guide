@@ -1,0 +1,67 @@
+//一个栈的元素类型为整形。现在想将该栈从栈顶到栈底从小到大的顺序排序，只允许申请一个栈，可以定义其他的变量，但是不能定义其他的数据结构。如何实现排序？
+
+解题思路：
+原始数据栈 stack
+创建一个栈 temp
+定义一个变量 item
+
+从stack中取出栈顶元素，放入item中，如果temp为空，将item压入栈temp；
+如果temp不为空，将item与temp的栈顶元素比较：
+    如果item<temp.top()：将item压入temp
+    如果item>=temp.top()：将temp中栈顶元素逐个取出，压入原始数据栈stack中，直到栈temp中的栈顶元素temp.top()<item，
+    将item压入temp栈，再从stack中取出栈顶元素放入item中，重复上述步骤，直到原始栈为空
+
+#include<iostream>
+#include<stack>
+using namespace std;
+void Sotr_stack(stack<int>& s)
+{
+	stack<int> temp;//创建一个临时栈
+	int urr;//保存栈退出的元素
+	while (!s.empty())
+	{
+		urr = s.top();
+		s.pop();
+		if (!temp.empty())
+		{
+			int item = temp.top();
+			while (item<=urr)
+			{
+				temp.pop();
+				if (temp.empty()) {
+					s.push(item);
+					break;
+				}
+				s.push(item);
+				item = temp.top();
+			}
+			temp.push(urr);
+		}
+		else
+		{
+			temp.push(urr);
+		}
+	}
+	while (!temp.empty())
+	{
+		s.push(temp.top());
+		temp.pop();
+	}
+}
+int main()
+{
+	stack<int> Stack;
+	int n;
+	while (cin>>n&&n!=-1)
+	{
+		Stack.push(n);
+	}
+	Sotr_stack(Stack);
+	while (!Stack.empty())
+	{
+		cout << Stack.top() << " ";
+		Stack.pop();
+	}
+	cout << endl;
+	return 0;
+}
